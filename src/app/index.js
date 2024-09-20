@@ -1,50 +1,75 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { useAuth } from "../hooks/Auth";
-import { router } from "expo-router";
-
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Button, BackHandler} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useAuth } from '../hooks/Auth';
+import { router } from 'expo-router';
 export default function App() {
   const { signIn, signOut } = useAuth();
 
-  const handleEntrarSuper = async => {
+
+  // const togglePasswordVisibility = () => { setPasswordVisibility(!passwordVisibility); };
+
+  const handleEntrarSuper = async () => {
     try {
-      await signIn({"super@email.com", password: "Super123!"})
-        router.replace("/");
-      } catch (error) {
-        console.log(e)
-      }
-  }
+      await signIn({ email: "super@email.com", password: "A123456a!" });
+      //router.replace("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Aplicativo pronto para uso</Text>
-      <Button title="Singin Super" onPress={ handleEntrarSuper } />
-      <Button
-        title="Signin Adm"
-        onPress={() => signIn({ email: "adm@email.com", password: "Adm123!" })
-        }
-      />
-      <Button
-        title="Signin User"
-        onPress={() =>
-          signIn({ email: "user@email.com", password: "User123!" })
-        }
-      />
-      <StatusBar style="auto" />
-    </View>
+      <Text style={styles.title}>Aplicativo Pronto Para Usar</Text>
+      
+      <Button title="Signin Super" onPress={handleEntrarSuper} />
+
+      
+      <Button title="Sobre" onPress={() =>router.push("/about")} />
+        <Button title="Sair do aplicativo" onPress={()=>BackHandler.exitApp()} />
+        <StatusBar style="auto" />
+</View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    gap: 15,
   },
   title: {
-    fontFamily: "regular",
-    fontSize: 29
+    fontSize: 20,
+    marginBottom: 20,
+    fontFamily: "italic",
   },
+  //button: {
+    //backgroundColor: 'blue',
+   // padding: 10,
+    //borderRadius: 5,
+   // marginBottom: 10,
+   // width: '30%',
+    //alignItems: 'center',
+   // flex: 1,
+  //},
+  //buttonText: {
+  //  color: '#fff',
+   // fontSize: 16,
+  //},
+ // inputbox: {
+    //flexDirection: "row",
+    //gap: 10,
+   // margin: 10,
+   // alignItems: "center",
+  //},
+  //emailinput: {
+  //  flex: 1,
+   // fontFamily: "Helvetica",
+  //  fontSize: 16,
+ // },
 });
+
+
+// 15:26 aula 7

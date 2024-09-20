@@ -1,5 +1,5 @@
-import { Drawer } from "@react-navigation/drawer";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Drawer } from 'expo-router/drawer';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const DrawerLayout = () => {
     return (
@@ -10,5 +10,5 @@ const DrawerLayout = () => {
 };
 
 export default function Layout() {
-    return DrawerLayout ();
+    return DrawerLayout();
 }
