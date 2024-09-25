@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
 });
 
 
-// 15:26 aula 7
+// 03:46 aula 8

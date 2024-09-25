@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { authUser } from "../../database/useUsersDatabase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext({});
 
@@ -35,6 +36,7 @@ export function AuthProvider({ children }) {
     };
 
     const signOut = async () => {
+        await AsyncStorage.deleteItem("@payment:user");
         setUser({});
     };
 
