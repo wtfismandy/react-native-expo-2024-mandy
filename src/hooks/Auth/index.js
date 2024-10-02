@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { authUser } from "../../database/useUsersDatabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useUsersDatabase } from "../../database/useUsersDatabase";
+import { ActivityIndicator, Text, View } from "react-native";
 
 const AuthContext = createContext({});
 
@@ -17,16 +18,42 @@ export function AuthProvider({ children }) {
         role: null,
     });
 
+    const { authUser } = useUsersDatabase();
+
+    useEffect(() => {
+        const loadStorageData = async () => {
+         const storageUser = await AsyncStorage.getItem("payment:user");
+
+         if (storageUser) {
+            setUser({
+                autenticated: true,
+                user: JSON.parse(storageUser),
+                role: JSON.parse(storageUser).role,
+            });
+         } else {
+            setUser({
+                autenticated: false,
+                user: null,
+                role: null,
+            });
+         }
+        };
+         
+        loadStorageData();
+    },[]);
+
     const signIn = async ( {email, password} ) => {
         const response = await authUser({ email, password });
-
         if (!response) {
             setUser({
                 autenticated: false,
                 user: null,
                 role: null,
             });
+            throw new Error("Usuário ou senha inválidos");
         }
+
+        await AsyncStorage.setItem("@payment:user", JSON.stringify(response));
 
         setUser ({
         autenticated: true,
@@ -36,15 +63,23 @@ export function AuthProvider({ children }) {
     };
 
     const signOut = async () => {
-        await AsyncStorage.deleteItem("@payment:user");
+        await AsyncStorage.removeItem("@payment:user");
         setUser({});
     };
 
-    useEffect(() => {
-        console.log("AuthProvider: ", user);
-    }, [user]);
+    if (user?.autenticated === null) {
+        return (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ fontSize: 28, marginTop: 15}}>
+                Carregando dados do usuário
+            </Text>
+            <ActivityIndicator size="large" />
+        </View>
+        );
+    }
 
-    return (
+
+    return ( 
         <AuthContext.Provider value={{ user, signIn, signOut }}>
             {children}
         </AuthContext.Provider>
