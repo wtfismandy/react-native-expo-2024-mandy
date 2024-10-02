@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, Alert, TouchableOpacity, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Alert, TouchableOpacity, Text, Button, TextInput, BackHandler } from "react-native";
 import { useAuth } from "../hooks/Auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -36,6 +36,7 @@ export default function App() {
           onChangeText={setEmail}
         />
       </View>
+
       <View style={styles.inputbox}>
         <Ionicons name="lock-closed-outline" size={20} color="black" />
         <TextInput
@@ -53,10 +54,16 @@ export default function App() {
           />
         </TouchableOpacity>
       </View>
+
       <TouchableOpacity onPress={handleEntrarSuper} style={styles.button}>
         <Text>Entrar</Text>
       </TouchableOpacity>
-      <Button title="Sobre" onPress={() => router.push("/about")} />
+      <Button title="Sobre" 
+      onPress={() => router.push("/about")} />
+      <Button title="sair do aplicativo"
+      onPress={() => BackHandler.exitApp()} 
+      />
+        <StatusBar style="auto" />
     </View>
   );
 }
